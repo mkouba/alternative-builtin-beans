@@ -18,33 +18,19 @@ package org.jboss.cdi.builtinbeans;
 
 import static org.junit.Assert.assertEquals;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import javax.enterprise.context.Dependent;
-import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.Extension;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.util.AnnotationLiteral;
-import javax.enterprise.util.TypeLiteral;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,7 +44,7 @@ public class AlternativeInstanceTest {
 
     @Deployment
     public static Archive<?> createTestArchive() {
-        return ShrinkWrap.create(JavaArchive.class).addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
+        return ShrinkWrap.create(JavaArchive.class).addAsManifestResource(BeansXml.getBeansXmlAsset(), "beans.xml")
                 .addAsServiceProvider(Extension.class, InstanceExtension.class)
                 .addClasses(Bravo.class, Alpha.class, InstanceExtension.class, IntegerInstanceBean.class);
     }
@@ -111,112 +97,6 @@ public class AlternativeInstanceTest {
 
         void afterBeanDiscovery(@Observes AfterBeanDiscovery event) {
             event.addBean(new IntegerInstanceBean());
-        }
-
-    }
-
-    public static class IntegerInstanceBean implements Bean<Instance<Integer>> {
-
-        @Override
-        public Instance<Integer> create(CreationalContext<Instance<Integer>> creationalContext) {
-            return new Instance<Integer>() {
-
-                @Override
-                public Iterator<Integer> iterator() {
-                    throw new UnsupportedOperationException();
-                }
-
-                @Override
-                public Integer get() {
-                    return Integer.valueOf(42);
-                }
-
-                @Override
-                public Instance<Integer> select(Annotation... qualifiers) {
-                    throw new UnsupportedOperationException();
-                }
-
-                @Override
-                public <U extends Integer> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
-                    throw new UnsupportedOperationException();
-                }
-
-                @Override
-                public <U extends Integer> Instance<U> select(TypeLiteral<U> subtype, Annotation... qualifiers) {
-                    throw new UnsupportedOperationException();
-                }
-
-                @Override
-                public boolean isUnsatisfied() {
-                    return false;
-                }
-
-                @Override
-                public boolean isAmbiguous() {
-                    return false;
-                }
-
-                @Override
-                public void destroy(Integer instance) {
-                    throw new UnsupportedOperationException();
-                }
-            };
-        }
-
-        @Override
-        public void destroy(Instance<Integer> instance, CreationalContext<Instance<Integer>> creationalContext) {
-        }
-
-        @SuppressWarnings("serial")
-        @Override
-        public Set<Type> getTypes() {
-            return Collections.singleton(new TypeLiteral<Instance<Integer>>() {
-            }.getType());
-        }
-
-        @SuppressWarnings("serial")
-        @Override
-        public Set<Annotation> getQualifiers() {
-            Set<Annotation> qualifiers = new HashSet<>();
-            qualifiers.add(TestQualifier.Literal.INSTANCE);
-            qualifiers.add(new AnnotationLiteral<Any>() {
-            });
-            return qualifiers;
-        }
-
-        @Override
-        public Class<? extends Annotation> getScope() {
-            return Dependent.class;
-        }
-
-        @Override
-        public String getName() {
-            return null;
-        }
-
-        @Override
-        public Set<Class<? extends Annotation>> getStereotypes() {
-            return Collections.emptySet();
-        }
-
-        @Override
-        public boolean isAlternative() {
-            return true;
-        }
-
-        @Override
-        public Class<?> getBeanClass() {
-            return IntegerInstanceBean.class;
-        }
-
-        @Override
-        public Set<InjectionPoint> getInjectionPoints() {
-            return Collections.emptySet();
-        }
-
-        @Override
-        public boolean isNullable() {
-            return false;
         }
 
     }
