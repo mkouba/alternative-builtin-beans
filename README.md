@@ -6,7 +6,10 @@ Weld 2 and Weld 3
 =================
 Not supported at all.
 
-`AlternativeInstanceTest` fails with `Unsatisfied dependencies for type Integer with qualifiers @TestQualifier at org.jboss.cdi.builtinbeans.AlternativeInstanceTest.testAlternativeInstance(AlternativeInstanceTest.java:60)`. 
+> $ mvn clean test -DcdiImpl=weld2
+> $ mvn clean test -DcdiImpl=weld3
+
+`AlternativeInstanceTest` fails with `Unsatisfied dependencies for type Integer with qualifiers @TestQualifier at org.jboss.cdi.builtinbeans.AlternativeInstanceTest.testAlternativeInstance(AlternativeInstanceTest.java:60)`.
 **Custom `Instance` bean is ignored and there is no bean for type `Integer` and qualifier `@TestQualifier`**.
 
 `AlternativeEventTest` fails `AlternativeEventTest.testAlternativeEvent(AlternativeEventTest.java:63)`.
@@ -16,8 +19,16 @@ OWB 1.7 and OWB 2.0
 ===================
 Supported but does not work correctly.
 
+> $ mvn clean test -DcdiImpl=owb1
+
 `AlternativeInstanceTest` fails with `testAlternativeInstance(org.jboss.cdi.builtinbeans.AlternativeInstanceTest): expected:<1> but was:<42>`.
 **Original `Instance` is not used for an injection point with the same type but different qualifiers.**
 
 `AlternativeEventTest` fails with `testAlternativeEvent(org.jboss.cdi.builtinbeans.AlternativeEventTest): expected:<1> but was:<0>`.
 **Original `Event` is not used for an injection point with the same type but different qualifiers.**
+
+> $ mvn clean test -DcdiImpl=owb2
+
+`AlternativeInstanceTest` fails with `testAlternativeInstance(org.jboss.cdi.builtinbeans.AlternativeInstanceTest): Api type [java.lang.Integer] is not found with the qualifiers (..)`
+
+`AlternativeEventTest` fails with assertion error at `org.jboss.cdi.builtinbeans.AlternativeEventTest.testAlternativeEvent(AlternativeEventTest.java:63)`
