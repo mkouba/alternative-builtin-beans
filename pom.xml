@@ -19,10 +19,10 @@
       <maven.compiler.source>1.8</maven.compiler.source>
       <maven.compiler.target>1.8</maven.compiler.target>
       <!-- Versions -->
-      <version.weld2>2.4.4.Final</version.weld2>
-      <version.weld3>3.0.0.Final</version.weld3>
+      <version.weld2>2.4.5.Final</version.weld2>
+      <version.weld3>3.0.1.Final</version.weld3>
       <version.owb1>1.7.4</version.owb1>
-      <version.owb2>2.0.0</version.owb2>
+      <version.owb2>2.0.2</version.owb2>
       <version.junit>4.12</version.junit>
       <version.slf4j>1.7.10</version.slf4j>
       <version.arquillian></version.arquillian>
